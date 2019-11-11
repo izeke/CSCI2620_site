@@ -2,18 +2,41 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Flask Tutorial</title>
+    <title>Python X Flask X Vue Template Site</title>
   </head>
   <body>
     {% extends "template.html" %}
     {% block content %}
 
-    <h1> My First Try Using Flask </h1>
-    <p> Flask is Fun </p>
+    <h1> Python X Flask X Vue </h1>
+    <p> This site is a template site to show
+      integration between Python, Flask, and Vue.
+      See the simple Vue app below. </p>
 
     <div id="app">
-      [[ band ]]
-      [[ albums ]]
+      <div class="thumbnail-group">
+        <div v-for="image in images" class="thumbnail-container">
+          <img
+            class="thumbnail"
+            :src="'{{url_for('static', filename='')}}img/input/' + image"
+            v-on:click="loadImage(image)">
+        </div>
+      </div>
+      <div class="image-container">
+        <img
+          class="edited-image"
+          :src="loadedImage">
+      </div>
+      <div>
+        <button class='btn btn-primary' v-on:click="addVLine()">Add Vertical Line</button>
+        <button class='btn btn-primary' v-on:click="addHLine()">Add Horizontal Line</button>
+        <button class='btn btn-primary' v-on:click="shiftSubsetV()">Shift a Vertical Subset</button>
+        <button class='btn btn-primary' v-on:click="shiftSubsetH()">Shift a Horizontal Subset</button>
+        <button class='btn btn-primary' v-on:click="fuzzify()">Fuzzify</button>
+        <button class='btn btn-primary' v-on:click="scanlineify()">Add Scanlines</button>
+        <button class='btn btn-primary' v-on:click="bitify()">Reduce Bits</button>
+        <button class='btn btn-primary' v-on:click="splitColors()">Split Colors</button>
+      </div>
     </div>
     {% endblock %}
 
