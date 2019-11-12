@@ -27,7 +27,7 @@
           class="edited-image"
           :src="loadedImage">
       </div>
-      <div>
+      <div class="button-group">
         <button class='btn btn-primary' v-on:click="addVLine()">Add Vertical Line</button>
         <button class='btn btn-primary' v-on:click="addHLine()">Add Horizontal Line</button>
         <button class='btn btn-primary' v-on:click="shiftSubsetV()">Shift a Vertical Subset</button>
@@ -35,7 +35,45 @@
         <button class='btn btn-primary' v-on:click="fuzzify()">Fuzzify</button>
         <button class='btn btn-primary' v-on:click="scanlineify()">Add Scanlines</button>
         <button class='btn btn-primary' v-on:click="bitify()">Reduce Bits</button>
-        <button class='btn btn-primary' v-on:click="splitColors()">Split Colors</button>
+        <!-- <button class='btn btn-primary' v-on:click="splitColors()">Split Colors</button> -->
+      </div>
+      <div class="form-group">
+        <label for="redStep">Shift red: </label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <button class='btn btn-primary' v-on:click="shiftColor('red', 'up', redStep)"><i class="fas fa-arrow-up"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('red', 'left', redStep)"><i class="fas fa-arrow-left"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('red', 'right', redStep)"><i class="fas fa-arrow-right"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('red', 'down', redStep)"><i class="fas fa-arrow-down"></i></button>
+          </div>
+          <input id="redStep" v-model="redStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="greenStep">Shift green: </label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <button class='btn btn-primary' v-on:click="shiftColor('green', 'up', greenStep)"><i class="fas fa-arrow-up"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('green', 'left', greenStep)"><i class="fas fa-arrow-left"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('green', 'right', greenStep)"><i class="fas fa-arrow-right"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('green', 'down', greenStep)"><i class="fas fa-arrow-down"></i></button>
+          </div>
+          <input id="greenStep" v-model="greenStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="blueStep">Shift blue: </label>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'up', blueStep)"><i class="fas fa-arrow-up"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'left', blueStep)"><i class="fas fa-arrow-left"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'right', blueStep)"><i class="fas fa-arrow-right"></i></button>
+            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'down', blueStep)"><i class="fas fa-arrow-down"></i></button>
+          </div>
+          <input id="blueStep" v-model="blueStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+        </div>
       </div>
     </div>
     {% endblock %}

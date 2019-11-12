@@ -5,7 +5,10 @@ var app = new Vue({
         band: {},
         albums: {},
         images: {},
-        loadedImage: "static/img/placeholder.jpg"
+        loadedImage: "static/img/placeholder.jpg",
+        redStep: 0,
+        greenStep: 0,
+        blueStep: 0
     },
     methods: {
         fetchData: function() {
@@ -114,6 +117,16 @@ var app = new Vue({
             }, response => {
                 console.log("an error occurred");
             })
+        },
+        shiftColor: function(color, direction, step) {
+            this.$http.post('/shiftColor', {params: {'color': color, 'direction': direction, 'step': step}})
+            .then(response => {
+                let newImage = new Image();
+                newImage.src = "static/img/out.jpg?" + new Date().getTime();
+                this.loadedImage = newImage.src;
+            }, response => {
+                console.log("an error occurred");
+            });
         }
     },
     mounted: function() {

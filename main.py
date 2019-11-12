@@ -99,5 +99,23 @@ def splitColors():
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
 
+@app.route('/shiftColor', methods=['POST'])
+def shiftColor():
+    directionDict = {"up": {"x":0, "y": -1}, "down": {"x": 0, "y": 1}, "left": {"x": -1, "y": 0}, "right": {"x": 1, "y": 0}}
+    color = request.json['params']['color']
+    direction = directionDict[request.json['params']['direction']]
+    step = int(request.json['params']['step'])
+
+
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    if color == 'red':
+        img = glitch.shiftRed(img, direction['x'] * step, direction['y'] * step)
+    elif color == 'green':
+        img = glitch.shiftGreen(img, direction['x'] * step, direction['y'] * step)
+    elif color == 'blue':
+        img = glitch.shiftBlue(img, direction['x'] * step, direction['y'] * step)
+
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
 if __name__ == "__main__":
     app.run(debug=True)

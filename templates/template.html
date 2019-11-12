@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-   <meta charset="utf-8">
-   <title>Python X Flask X Vue Template Site</title>
-   <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
-   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
-      crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>Python X Flask X Vue Template Site</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   </head>
   <body>
     <header>
@@ -36,6 +34,9 @@
 
     <!-- ajax -->
     <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+
+    <!-- fontawesome -->
+    <script src="https://kit.fontawesome.com/2d73cc2e8e.js" crossorigin="anonymous"></script>
 
     {% block scripts %}
     {% endblock %}

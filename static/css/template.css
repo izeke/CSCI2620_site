@@ -21,7 +21,7 @@ img.thumbnail {
 
 
 div.image-container {
-    width: 80vw;
+    width: 50vw;
     display: block;
     margin: auto;
 }
@@ -30,4 +30,13 @@ img.edited-image {
     max-height: 100%;
     border: none;
     background-color: #000;
+    margin: 20px;
+}
+
+.button-group button {
+    margin: 5px;
+}
+
+.input-group input {
+    max-width: 80px;
 }
