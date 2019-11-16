@@ -14,65 +14,134 @@
       See the simple Vue app below. </p>
 
     <div id="app">
-      <div class="thumbnail-group">
-        <div v-for="image in images" class="thumbnail-container">
-          <img
-            class="thumbnail"
-            :src="'{{url_for('static', filename='')}}img/input/' + image"
-            v-on:click="loadImage(image)">
-        </div>
-      </div>
-      <div class="image-container">
-        <img
-          class="edited-image"
-          :src="loadedImage">
-      </div>
-      <div class="button-group">
-        <button class='btn btn-primary' v-on:click="addVLine()">Add Vertical Line</button>
-        <button class='btn btn-primary' v-on:click="addHLine()">Add Horizontal Line</button>
-        <button class='btn btn-primary' v-on:click="shiftSubsetV()">Shift a Vertical Subset</button>
-        <button class='btn btn-primary' v-on:click="shiftSubsetH()">Shift a Horizontal Subset</button>
-        <button class='btn btn-primary' v-on:click="fuzzify()">Fuzzify</button>
-        <button class='btn btn-primary' v-on:click="scanlineify()">Add Scanlines</button>
-        <button class='btn btn-primary' v-on:click="bitify()">Reduce Bits</button>
-        <!-- <button class='btn btn-primary' v-on:click="splitColors()">Split Colors</button> -->
-      </div>
-      <div class="form-group">
-        <label for="redStep">Shift red: </label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <button class='btn btn-primary' v-on:click="shiftColor('red', 'up', redStep)"><i class="fas fa-arrow-up"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('red', 'left', redStep)"><i class="fas fa-arrow-left"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('red', 'right', redStep)"><i class="fas fa-arrow-right"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('red', 'down', redStep)"><i class="fas fa-arrow-down"></i></button>
+      <div class="row">
+        <div class="col-12">
+          <div class="thumbnail-group">
+            <div v-for="image in images" class="thumbnail-container">
+              <img
+                class="thumbnail"
+                :src="'{{url_for('static', filename='')}}img/input/' + image"
+                v-on:click="loadImage(image)">
+            </div>
           </div>
-          <input id="redStep" v-model="redStep" type="text" class="form-control" placeholder="Step size (in pixels)">
         </div>
       </div>
+      <div class="row">
+        <div class="col-8">
+          <div class="image-container">
+            <img
+              class="edited-image"
+              :src="loadedImage">
+          </div>
+        </div>
+        <div id="actionGroup" class="col-4">
+          <div id="accordion">
+            <div id="shiftColorsGroup" class="card">
+              <div class="card-header">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseShiftColors" aria-expanded="true" aria-controls="collapseShiftColors">
+                  Shift Colors
+                </button>
+              </div>
+              <div id="collapseShiftColors" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="redStep">Shift red: </label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class='btn btn-primary' v-on:click="shiftColor('red', 'up', redStep)"><i class="fas fa-arrow-up"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('red', 'left', redStep)"><i class="fas fa-arrow-left"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('red', 'right', redStep)"><i class="fas fa-arrow-right"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('red', 'down', redStep)"><i class="fas fa-arrow-down"></i></button>
+                      </div>
+                      <input id="redStep" style="max-width: 80px;" v-model="redStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+                    </div>
+                  </div>
 
-      <div class="form-group">
-        <label for="greenStep">Shift green: </label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <button class='btn btn-primary' v-on:click="shiftColor('green', 'up', greenStep)"><i class="fas fa-arrow-up"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('green', 'left', greenStep)"><i class="fas fa-arrow-left"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('green', 'right', greenStep)"><i class="fas fa-arrow-right"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('green', 'down', greenStep)"><i class="fas fa-arrow-down"></i></button>
-          </div>
-          <input id="greenStep" v-model="greenStep" type="text" class="form-control" placeholder="Step size (in pixels)">
-        </div>
-      </div>
+                  <div class="form-group">
+                    <label for="greenStep">Shift green: </label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class='btn btn-primary' v-on:click="shiftColor('green', 'up', greenStep)"><i class="fas fa-arrow-up"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('green', 'left', greenStep)"><i class="fas fa-arrow-left"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('green', 'right', greenStep)"><i class="fas fa-arrow-right"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('green', 'down', greenStep)"><i class="fas fa-arrow-down"></i></button>
+                      </div>
+                      <input id="greenStep" style="max-width: 80px;"  v-model="greenStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+                    </div>
+                  </div>
 
-      <div class="form-group">
-        <label for="blueStep">Shift blue: </label>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'up', blueStep)"><i class="fas fa-arrow-up"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'left', blueStep)"><i class="fas fa-arrow-left"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'right', blueStep)"><i class="fas fa-arrow-right"></i></button>
-            <button class='btn btn-primary' v-on:click="shiftColor('blue', 'down', blueStep)"><i class="fas fa-arrow-down"></i></button>
+                  <div class="form-group">
+                    <label for="blueStep">Shift blue: </label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class='btn btn-primary' v-on:click="shiftColor('blue', 'up', blueStep)"><i class="fas fa-arrow-up"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('blue', 'left', blueStep)"><i class="fas fa-arrow-left"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('blue', 'right', blueStep)"><i class="fas fa-arrow-right"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftColor('blue', 'down', blueStep)"><i class="fas fa-arrow-down"></i></button>
+                      </div>
+                      <input id="blueStep" style="max-width: 80px;"  v-model="blueStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="shiftSectionGroup" class="card">
+              <div class="card-header">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseShiftSection" aria-expanded="true" aria-controls="collapseShiftSection">
+                  Shift Section
+                </button>
+              </div>
+              <div id="collapseShiftSection" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="shiftVStep">Shift vertical band: </label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class='btn btn-primary' v-on:click="shiftSubsetV(shiftVLeftBound, shiftVWidth, shiftVStep, 'up')"><i class="fas fa-arrow-up"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftSubsetV(shiftVLeftBound, shiftVWidth, shiftVStep, 'down')"><i class="fas fa-arrow-down"></i></button>
+                      </div>
+                      <input id="shiftVLeftBound" v-model="shiftVLeftBound" type="text" class="form-control" placeholder="Left Bound (in pixels)">
+                      <input id="shiftVWidth" v-model="shiftVWidth" type="text" class="form-control" placeholder="Width (in pixels)">
+                      <input id="shiftVStep" v-model="shiftVStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="shiftHStep">Shift horizontal band: </label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class='btn btn-primary' v-on:click="shiftSubsetH(shiftHTopBound, shiftHWidth, shiftHStep, 'left')"><i class="fas fa-arrow-left"></i></button>
+                        <button class='btn btn-primary' v-on:click="shiftSubsetH(shiftHTopBound, shiftHWidth, shiftHStep, 'right')"><i class="fas fa-arrow-right"></i></button>
+                      </div>
+                      <input id="shiftHTopBound" v-model="shiftHTopBound" type="text" class="form-control" placeholder="Left Bound (in pixels)">
+                      <input id="shiftHWidth" v-model="shiftHWidth" type="text" class="form-control" placeholder="Width (in pixels)">
+                      <input id="shiftHStep" v-model="shiftHStep" type="text" class="form-control" placeholder="Step size (in pixels)">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="otherGroup" class="card">
+              <div class="card-header">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOther" aria-expanded="true" aria-controls="collapseOther">
+                  Other
+                </button>
+              </div>
+              <div id="collapseOther" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <div class="button-group">
+                    <button class='btn btn-primary' v-on:click="addVLine()">Add Vertical Line</button>
+                    <button class='btn btn-primary' v-on:click="addHLine()">Add Horizontal Line</button>
+                    <button class='btn btn-primary' v-on:click="shiftSubsetV()">Shift a Vertical Subset</button>
+                    <button class='btn btn-primary' v-on:click="shiftSubsetH()">Shift a Horizontal Subset</button>
+                    <button class='btn btn-primary' v-on:click="fuzzify()">Fuzzify</button>
+                    <button class='btn btn-primary' v-on:click="scanlineify()">Add Scanlines</button>
+                    <button class='btn btn-primary' v-on:click="bitify()">Reduce Bits</button>
+                    <!-- <button class='btn btn-primary' v-on:click="splitColors()">Split Colors</button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <input id="blueStep" v-model="blueStep" type="text" class="form-control" placeholder="Step size (in pixels)">
         </div>
       </div>
     </div>

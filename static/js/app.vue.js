@@ -6,9 +6,15 @@ var app = new Vue({
         albums: {},
         images: {},
         loadedImage: "static/img/placeholder.jpg",
-        redStep: 0,
-        greenStep: 0,
-        blueStep: 0
+        redStep: 100,
+        greenStep: 100,
+        blueStep: 100,
+        shiftVLeftBound: '',
+        shiftVWidth: '',
+        shiftVStep: '',
+        shiftHTopBound: '',
+        shiftHWidth: '',
+        shiftHStep: '',
     },
     methods: {
         fetchData: function() {
@@ -50,26 +56,6 @@ var app = new Vue({
         },
         addHLine: function() {
             this.$http.get('/addHLine').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
-            }, response => {
-                console.log("an error occurred");
-            })
-        },
-        shiftSubsetV: function() {
-            this.$http.get('/shiftSubsetV').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
-            }, response => {
-                console.log("an error occurred");
-            })
-        },
-        shiftSubsetH: function() {
-            this.$http.get('/shiftSubsetH').then(response => {
                 let newImage = new Image();
                 newImage.src = "static/img/out.jpg?" + new Date().getTime();
                 this.loadedImage = newImage.src;
@@ -127,7 +113,27 @@ var app = new Vue({
             }, response => {
                 console.log("an error occurred");
             });
-        }
+        },
+        shiftSubsetV: function(leftBound, width, distance, direction) {
+            this.$http.post('/shiftSubsetV', {params: {'leftBound': leftBound, 'width': width, 'distance': distance, 'direction': direction}}).then(response => {
+                let newImage = new Image();
+                newImage.src = "static/img/out.jpg?" + new Date().getTime();
+                this.loadedImage = newImage.src;
+                console.log("successfully updated image")
+            }, response => {
+                console.log("an error occurred");
+            })
+        },
+        shiftSubsetH: function(topBound, width, distance, direction) {
+            this.$http.post('/shiftSubsetH', {params: {'topBound': topBound, 'width': width, 'distance': distance, 'direction': direction}}).then(response => {
+                let newImage = new Image();
+                newImage.src = "static/img/out.jpg?" + new Date().getTime();
+                this.loadedImage = newImage.src;
+                console.log("successfully updated image")
+            }, response => {
+                console.log("an error occurred");
+            })
+        },
     },
     mounted: function() {
         this.fetchData();

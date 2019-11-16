@@ -93,40 +93,76 @@ def shift(img, xShift, yShift):
     return shifted
 
 
-def shiftSubsetV(img, minWidth, maxWidth, shifts):
+# def shiftSubsetV(img, minWidth, maxWidth, shifts):
+#     res = img.copy()
+
+#     height, width, pix = res.shape
+#     for x in range(shifts):
+#         dist = random.randint(0, height)
+#         left = random.randint(0, width)
+#         right = left + random.randint(minWidth, maxWidth)
+#         if right > width:
+#             right = width
+
+#         resSub = res[:, left:right, :].copy()
+#         resSub = np.roll(resSub, dist, 0)
+#         res[:, left:right, :] = resSub
+
+#     return res
+
+def shiftSubsetV(img, leftBound, subsetWidth, shiftDist):
     res = img.copy()
-
     height, width, pix = res.shape
-    for x in range(shifts):
-        dist = random.randint(0, height)
-        left = random.randint(0, width)
-        right = left + random.randint(minWidth, maxWidth)
-        if right > width:
-            right = width
 
-        resSub = res[:, left:right, :].copy()
-        resSub = np.roll(resSub, dist, 0)
-        res[:, left:right, :] = resSub
+    rightBound = leftBound + subsetWidth
+    print(rightBound)
+    print(width)
+    print()
+    if rightBound > width:
+        if leftBound > width:
+            res = shiftSubsetV(res, leftBound - width, rightBound - width, shiftDist)
+        else:
+            res = shiftSubsetV(res, 0, rightBound - width, shiftDist)
+        rightBound = width
+    resSub = res[:, leftBound:rightBound, :].copy()
+    resSub = np.roll(resSub, shiftDist, 0)
+    res[:, leftBound:rightBound, :] = resSub
 
     return res
 
-
-def shiftSubsetH(img, minWidth, maxWidth, shifts):
+def shiftSubsetH(img, topBound, subsetWidth, shiftDist):
     res = img.copy()
-
     height, width, pix = res.shape
-    for x in range(shifts):
-        dist = random.randint(0, width)
-        top = random.randint(0, height)
-        bottom = top + random.randint(minWidth, maxWidth)
-        if bottom > width:
-            right = width
 
-        resSub = res[top:bottom, :, :].copy()
-        resSub = np.roll(resSub, dist, 1)
-        res[top:bottom, :, :] = resSub
+    bottomBound = topBound + subsetWidth
+    if bottomBound > height:
+        if topBound > height:
+            res = shiftSubsetH(res, topBound - height, bottomBound - height, shiftDist)
+        else:
+            res = shiftSubsetH(res, 0, bottomBound - height, shiftDist)
+        bottomBound = height
+    resSub = res[topBound:bottomBound, :, :].copy()
+    resSub = np.roll(resSub, shiftDist, 1)
+    res[topBound:bottomBound, :, :] = resSub
 
     return res
+
+# def shiftSubsetH(img, minWidth, maxWidth, shifts):
+#     res = img.copy()
+
+#     height, width, pix = res.shape
+#     for x in range(shifts):
+#         dist = random.randint(0, width)
+#         top = random.randint(0, height)
+#         bottom = top + random.randint(minWidth, maxWidth)
+#         if bottom > width:
+#             right = width
+
+#         resSub = res[top:bottom, :, :].copy()
+#         resSub = np.roll(resSub, dist, 1)
+#         res[top:bottom, :, :] = resSub
+
+#     return res
 
 
 def shiftBlue(img, xShift, yShift):
@@ -175,8 +211,8 @@ def fuzzify(img):
     res = img.copy()
     height, width, x = res.shape
 
-    rand = np.random.randint(0, 2, (height, width, x), np.uint8)
-    res = res * rand
+    rand = np.random.rand(height, width, x) * 2
+    res = (res * rand) // 1
     return res
 
 
@@ -194,8 +230,20 @@ def scanlineify(img, width, offset=0, space=None):
     return res
 
 def bitify(img, bits):
-    res = img.copy()
-    res //= (256 // bits)
-    res *= (255 // bits)
+    res1 = img.copy()
+    res2 = img.copy()
 
+    res1 //= (256 // bits)
+    res1 *= (256 // bits)
+
+    res2 //= (256 // bits)
+    res2 += 1
+    res2 *= (256 // bits)
+    res2 -= 1
+
+    res1 //= 2
+    res2 //= 2
+
+    res = np.add(res1, res2)# // 2
+    # print(res)
     return res

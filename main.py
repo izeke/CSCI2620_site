@@ -56,19 +56,20 @@ def addHLine():
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
 
-@app.route('/shiftSubsetV')
-def shiftSubsetV():
-    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
-    img = glitch.shiftSubsetV(img, 5, 200, 1)
-    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
-    return json.dumps(True)
+# @app.route('/shiftSubsetV')
+# def shiftSubsetV():
+#     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+#     # img = glitch.shiftSubsetV(img, 5, 200, 1)
+#     img = glitch.shiftSubsetV(img, 4000, 500, 500)
+#     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+#     return json.dumps(True)
 
-@app.route('/shiftSubsetH')
-def shiftSubsetH():
-    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
-    img = glitch.shiftSubsetH(img, 5, 200, 1)
-    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
-    return json.dumps(True)
+# @app.route('/shiftSubsetH')
+# def shiftSubsetH():
+#     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+#     img = glitch.shiftSubsetH(img, 5, 200, 1)
+#     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+#     return json.dumps(True)
 
 @app.route('/fuzzify')
 def fuzzify():
@@ -106,7 +107,6 @@ def shiftColor():
     direction = directionDict[request.json['params']['direction']]
     step = int(request.json['params']['step'])
 
-
     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
     if color == 'red':
         img = glitch.shiftRed(img, direction['x'] * step, direction['y'] * step)
@@ -117,5 +117,28 @@ def shiftColor():
 
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
+
+@app.route('/shiftSubsetV', methods=['POST'])
+def shiftSubsetV():
+    leftBound = int(request.json['params']['leftBound'])
+    width = int(request.json['params']['width'])
+    distance = int(request.json['params']['distance'])
+    direction = -1 if request.json['params']['direction'] == 'up' else 1
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    img = glitch.shiftSubsetV(img, leftBound, width, distance * direction)
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
+
+@app.route('/shiftSubsetH', methods=['POST'])
+def shiftSubsetH():
+    topBound = int(request.json['params']['topBound'])
+    width = int(request.json['params']['width'])
+    distance = int(request.json['params']['distance'])
+    direction = -1 if request.json['params']['direction'] == 'left' else 1
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    img = glitch.shiftSubsetH(img, topBound, width, distance * direction)
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
+
 if __name__ == "__main__":
     app.run(debug=True)
