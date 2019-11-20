@@ -144,40 +144,34 @@ def shiftSubsetH():
 @app.route('/sharpen')
 def sharpen():
     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
-    #Sharpen
-    # sharpen = np.array([[-1,-1,-1],
-    #                    [-1, 9,-1],
-    #                    [-1,-1,-1]])
-    # img = cv2.filter2D(img, -1, sharpen)
 
-    #Blur
-    # blur = np.array([[1,4,6,4,1],
-    #                  [4,16,24,16,4],
-    #                  [6,24,36,24,6],
-    #                  [4,16,24,16,4],
-    #                  [1,4,6,4,1],]) / 256
-    # img = cv2.filter2D(img, -1, blur)
+    sharpen = np.array([[-0.25,-0.25,-0.25],
+                       [-0.25, 3,-0.25],
+                       [-0.25,-0.25,-0.25]])
+    img = cv2.filter2D(img, -1, sharpen)
 
-    #sobel 5x5
-    # edge1 = np.array([[1,2,0,-2,-1],
-    #                   [4,8,0,-8,-4],
-    #                   [6,12,0,-12,-6],
-    #                   [4,8,0,-8,-4],
-    #                   [1,2,0,-2,-1],
-    #                   ])
-    # edge2 = np.array([[-1,-4,-6,-4,-1],
-    #                   [-2,-8,-12,-8,-2],
-    #                   [0,0,0,0,0],
-    #                   [2,8,12,8,2],
-    #                   [1,4,6,4,1],
-    #                   ])
-    # img = cv2.filter2D(img, -1, edge1)
-    # img = cv2.filter2D(img, -1, edge2)
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
 
-    edge1 = np.array([[1,0],[0,-1]])
-    edge2 = np.array([[0,1],[-1,0]])
-    img = cv2.filter2D(img, -1, edge1)
-    img = cv2.filter2D(img, -1, edge2)
+@app.route('/blur')
+def blur():
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+
+    blur = np.array([[1,4,6,4,1],
+                     [4,16,24,16,4],
+                     [6,24,36,24,6],
+                     [4,16,24,16,4],
+                     [1,4,6,4,1],]) / 256
+    img = cv2.filter2D(img, -1, blur)
+
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
+
+@app.route('/edgeDetect')
+def edgeDetect():
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+
+    img =cv2.bitwise_and(img, cv2.cvtColor(cv2.Canny(img, 100, 100), cv2.COLOR_GRAY2BGR))
 
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
