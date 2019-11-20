@@ -94,6 +94,16 @@ var app = new Vue({
                 console.log("an error occurred");
             })
         },
+        sharpen: function() {
+            this.$http.get('/sharpen').then(response => {
+                let newImage = new Image();
+                newImage.src = "static/img/out.jpg?" + new Date().getTime();
+                this.loadedImage = newImage.src;
+                console.log("successfully updated image")
+            }, response => {
+                console.log("an error occurred");
+            })
+        },
         splitColors: function() {
             this.$http.get('/splitColors').then(response => {
                 let newImage = new Image();
