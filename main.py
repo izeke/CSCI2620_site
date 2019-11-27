@@ -145,36 +145,82 @@ def shiftSubsetH():
 def sharpen():
     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
 
-    sharpen = np.array([[-0.25,-0.25,-0.25],
-                       [-0.25, 3,-0.25],
-                       [-0.25,-0.25,-0.25]])
+    # sharpen = np.array([[-0.25,-0.25,-0.25],
+    #                    [-0.25, 3,-0.25],
+    #                    [-0.25,-0.25,-0.25]])
+    # img = cv2.filter2D(img, -1, sharpen)
+
+    # sharpen = np.array([[-3, 0, -7],
+    #                     [1, 4, 1],
+    #                     [2, -1, 3]])
+    # img = cv2.filter2D(img, -1, sharpen)
+
+    # sharpen = np.array([[0,0,0,0,0,0,1000],
+    #                     [0,0,0,0,0,0,0],
+    #                     [0,0,0,0,0,0,0],
+    #                     [0,0,0,0,0,0,0],
+    #                     [0,0,0,0,0,0,0],
+    #                     [0,0,0,0,0,0,0],
+    #                     [1000,0,0,0,0,0,0]]) /2000
+    # img = cv2.filter2D(img, -1, sharpen)
+
+    sharpen = np.zeros((100,100))
+    total = 0
+    for x in range(0, 99):
+        for y in range(0, 99):
+            if x == 0 or y % x == 0 or x % (y + 2) == 0:
+                sharpen[x][y] = 1
+                total += 1
+    sharpen = sharpen / total
     img = cv2.filter2D(img, -1, sharpen)
 
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
 
-@app.route('/blur')
+@app.route('/blur', methods=['POST'])
 def blur():
-    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    kernelSize = int(request.json['params']['kernelSize'])
 
-    blur = np.array([[1,4,6,4,1],
-                     [4,16,24,16,4],
-                     [6,24,36,24,6],
-                     [4,16,24,16,4],
-                     [1,4,6,4,1],]) / 256
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    blur = np.ones((kernelSize,kernelSize)) / (kernelSize*kernelSize)
+
     img = cv2.filter2D(img, -1, blur)
 
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
 
-@app.route('/edgeDetect')
-def edgeDetect():
-    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+@app.route('/gaussianBlur', methods=['POST'])
+def gaussianBlur():
+    kernelSize = int(request.json['params']['kernelSize']) - 1
 
-    img =cv2.bitwise_and(img, cv2.cvtColor(cv2.Canny(img, 100, 100), cv2.COLOR_GRAY2BGR))
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    kernel = np.matmul(np.rot90(pascal(kernelSize), 1), pascal(kernelSize))
+    blur = kernel / np.sum(kernel)
+
+    img = cv2.filter2D(img, -1, blur)
 
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
+
+@app.route('/edgeDetect', methods=['POST'])
+def edgeDetect():
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+
+    if (request.json['params']['format'] == "gray"):
+        img = cv2.cvtColor(cv2.Canny(img, 100, 100), cv2.COLOR_GRAY2BGR)
+    elif (request.json['params']['format'] == "color"):
+        img = cv2.bitwise_and(img, cv2.cvtColor(cv2.Canny(img, 100, 100), cv2.COLOR_GRAY2BGR))
+
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
+
+
+
+def pascal(n):
+    line = [1]
+    for k in range(n):
+        line.append(line[k] * (n-k) / (k+1))
+    return [line]
 
 if __name__ == "__main__":
     app.run(debug=True)

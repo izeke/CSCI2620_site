@@ -9,12 +9,14 @@ var app = new Vue({
         redStep: 100,
         greenStep: 100,
         blueStep: 100,
-        shiftVLeftBound: '',
-        shiftVWidth: '',
-        shiftVStep: '',
-        shiftHTopBound: '',
-        shiftHWidth: '',
-        shiftHStep: '',
+        shiftVLeftBound: 0,
+        shiftVWidth: 0,
+        shiftVStep: 0,
+        shiftHTopBound: 0,
+        shiftHWidth: 0,
+        shiftHStep: 0,
+        blurKernelSize: 0,
+        gBlurKernelSize: 0
     },
     methods: {
         fetchData: function() {
@@ -35,101 +37,86 @@ var app = new Vue({
                 this.images = response.body;
             })
         },
+        refreshImage: function() {
+            let newImage = new Image();
+            newImage.src = "static/img/out.jpg?" + new Date().getTime();
+            this.loadedImage = newImage.src;
+            console.log("successfully updated image");
+        },
         loadImage: function(image) {
             this.$http.post('/loadImage', {params: {'image': image}}, {headers: {'Cache-Control': 'max-age=0, must-revalidate, no-store'}}).then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             });
         },
         addVLine: function() {
             this.$http.get('/addVLine').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         addHLine: function() {
             this.$http.get('/addHLine').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         fuzzify: function() {
             this.$http.get('/fuzzify').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         scanlineify: function() {
             this.$http.get('/scanlineify').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         bitify: function() {
             this.$http.get('/bitify').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         sharpen: function() {
             this.$http.get('/sharpen').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
-        blur: function() {
-            this.$http.get('/blur').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+        blur: function(blurKernelSize) {
+            this.$http.post('/blur', {params: {'kernelSize': blurKernelSize}}).then(response => {
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
-        edgeDetect: function() {
-            this.$http.get('/edgeDetect').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+        gBlur: function(gBlurKernelSize) {
+            this.$http.post('/gaussianBlur', {params: {'kernelSize': gBlurKernelSize}}).then(response => {
+                this.refreshImage();
+            }, response => {
+                console.log("an error occurred");
+            })
+        },
+        edgeDetect: function(format) {
+            this.$http.post('/edgeDetect', {params: {'format': format}})
+            .then(response => {
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         splitColors: function() {
             this.$http.get('/splitColors').then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
@@ -137,29 +124,21 @@ var app = new Vue({
         shiftColor: function(color, direction, step) {
             this.$http.post('/shiftColor', {params: {'color': color, 'direction': direction, 'step': step}})
             .then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             });
         },
         shiftSubsetV: function(leftBound, width, distance, direction) {
             this.$http.post('/shiftSubsetV', {params: {'leftBound': leftBound, 'width': width, 'distance': distance, 'direction': direction}}).then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })
         },
         shiftSubsetH: function(topBound, width, distance, direction) {
             this.$http.post('/shiftSubsetH', {params: {'topBound': topBound, 'width': width, 'distance': distance, 'direction': direction}}).then(response => {
-                let newImage = new Image();
-                newImage.src = "static/img/out.jpg?" + new Date().getTime();
-                this.loadedImage = newImage.src;
-                console.log("successfully updated image")
+                this.refreshImage();
             }, response => {
                 console.log("an error occurred");
             })

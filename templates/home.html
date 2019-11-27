@@ -120,6 +120,47 @@
                 </div>
               </div>
             </div>
+            <div id="kernelGroup" class="card">
+              <div class="card-header">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseKernel" aria-expanded="true" aria-controls="collapseKernel">
+                  Kernel
+                </button>
+              </div>
+              <div id="collapseKernel" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="blurKernelSize">Box Blur:</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class='btn btn-primary' v-on:click="blur(blurKernelSize)"><i class="fas fa-plus"></i></button>
+                      </div>
+                      <input id="blurKernelSize" style="max-width: 80px;" v-model="blurKernelSize" type="text" class="form-control" placeholder="Kernel size">
+                    </div>
+                  </div>
+                  <label for="gBlurKernelSize">Gaussian Blur:</label>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <button class='btn btn-primary' v-on:click="gBlur(gBlurKernelSize)"><i class="fas fa-plus"></i></button>
+                    </div>
+                    <input id="gBlurKernelSize" style="max-width: 80px;" v-model="gBlurKernelSize" type="text" class="form-control" placeholder="Kernel size">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="kernelGroup" class="card">
+              <div class="card-header">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseEdge" aria-expanded="true" aria-controls="collapseEdge">
+                  Edge Detection
+                </button>
+              </div>
+              <div id="collapseEdge" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                  <button class='btn btn-primary' v-on:click="edgeDetect('gray')">Black and White</button>
+                  <button class='btn btn-primary' v-on:click="edgeDetect('color')">Color</button>
+                </div>
+              </div>
+            </div>
+            </div>
             <div id="otherGroup" class="card">
               <div class="card-header">
                 <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOther" aria-expanded="true" aria-controls="collapseOther">
@@ -131,15 +172,10 @@
                   <div class="button-group">
                     <button class='btn btn-primary' v-on:click="addVLine()">Add Vertical Line</button>
                     <button class='btn btn-primary' v-on:click="addHLine()">Add Horizontal Line</button>
-                    <button class='btn btn-primary' v-on:click="shiftSubsetV()">Shift a Vertical Subset</button>
-                    <button class='btn btn-primary' v-on:click="shiftSubsetH()">Shift a Horizontal Subset</button>
                     <button class='btn btn-primary' v-on:click="fuzzify()">Fuzzify</button>
                     <button class='btn btn-primary' v-on:click="scanlineify()">Add Scanlines</button>
                     <button class='btn btn-primary' v-on:click="bitify()">Reduce Bits</button>
                     <button class='btn btn-primary' v-on:click="sharpen()">Sharpen</button>
-                    <button class='btn btn-primary' v-on:click="blur()">Blur</button>
-                    <button class='btn btn-primary' v-on:click="edgeDetect()">Edge Detect</button>
-                    <!-- <button class='btn btn-primary' v-on:click="splitColors()">Split Colors</button> -->
                   </div>
                 </div>
               </div>
