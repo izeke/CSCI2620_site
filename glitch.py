@@ -147,6 +147,17 @@ def shiftSubsetH(img, topBound, subsetWidth, shiftDist):
 
     return res
 
+def wavy(img):
+    res = img.copy()
+    height, width, pix = res.shape
+
+    for x in range(height):
+        y = (x % 10) - 5
+
+        res = shiftSubsetH(res, 5 * x, height - (10 * x), y)
+
+    return res
+
 # def shiftSubsetH(img, minWidth, maxWidth, shifts):
 #     res = img.copy()
 

@@ -145,34 +145,15 @@ def shiftSubsetH():
 def sharpen():
     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
 
-    # sharpen = np.array([[-0.25,-0.25,-0.25],
-    #                    [-0.25, 3,-0.25],
-    #                    [-0.25,-0.25,-0.25]])
-    # img = cv2.filter2D(img, -1, sharpen)
+    sharpen = np.array([[-0.25,-0.25,-0.25],
+                       [-0.25, 3,-0.25],
+                       [-0.25,-0.25,-0.25]])
+    img = cv2.filter2D(img, -1, sharpen)
 
     # sharpen = np.array([[-3, 0, -7],
     #                     [1, 4, 1],
     #                     [2, -1, 3]])
     # img = cv2.filter2D(img, -1, sharpen)
-
-    # sharpen = np.array([[0,0,0,0,0,0,1000],
-    #                     [0,0,0,0,0,0,0],
-    #                     [0,0,0,0,0,0,0],
-    #                     [0,0,0,0,0,0,0],
-    #                     [0,0,0,0,0,0,0],
-    #                     [0,0,0,0,0,0,0],
-    #                     [1000,0,0,0,0,0,0]]) /2000
-    # img = cv2.filter2D(img, -1, sharpen)
-
-    sharpen = np.zeros((100,100))
-    total = 0
-    for x in range(0, 99):
-        for y in range(0, 99):
-            if x == 0 or y % x == 0 or x % (y + 2) == 0:
-                sharpen[x][y] = 1
-                total += 1
-    sharpen = sharpen / total
-    img = cv2.filter2D(img, -1, sharpen)
 
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
@@ -216,16 +197,40 @@ def edgeDetect():
 
 @app.route('/test', methods=['POST'])
 def test():
-    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
-    height, width, x = img.shape
-    imgTest = cv2.imread(url_for('static', filename="img/glitch2.jpg")[1:], -1)
-    imgTest = cv2.resize(imgTest, (width, height))
-    # print(img.shape)
-    # print(imgTest.shape)
-    # print('hellooooooo')
+    #weird blur
+    # img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    # sharpen = np.zeros((100,100))
+    # total = 0
+    # for x in range(0, 99):
+    #     for y in range(0, 99):
+    #         if x == 0 or y % x == 0 or x % (y + 2) == 0:
+    #             sharpen[x][y] = 1
+    #             total += 1
+    # sharpen = sharpen / total
+    # img = cv2.filter2D(img, -1, sharpen)
+    # cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+
+
+    #vcr lines
+    # img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    # height, width, x = img.shape
+    # imgTest = cv2.imread(url_for('static', filename="img/glitch2.jpg")[1:], -1)
+    # imgTest = cv2.resize(imgTest, (width, height))
     # img = cv2.addWeighted(img, 0.75, imgTest, 0.25, 0.0)
-    img = img + imgTest
+    # cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+
+    #vcr border
+    # img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    # height, width, x = img.shape
+    # imgTest = cv2.imread(url_for('static', filename="img/glitch1.jpg")[1:], -1)
+    # imgTest = cv2.resize(imgTest, (width, height))
+    # img = img + imgTest
+    # cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    img = glitch.wavy(img)
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+
     return json.dumps(True)
 
 
