@@ -143,6 +143,13 @@ var app = new Vue({
                 console.log("an error occurred");
             })
         },
+        test: function() {
+            this.$http.post('/test', {params: {'test': 'test'}}).then(response => {
+                this.refreshImage();
+            }, response => {
+                console.log("an error occurred");
+            })
+        },
     },
     mounted: function() {
         this.fetchData();

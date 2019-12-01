@@ -214,6 +214,20 @@ def edgeDetect():
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
     return json.dumps(True)
 
+@app.route('/test', methods=['POST'])
+def test():
+    img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
+    height, width, x = img.shape
+    imgTest = cv2.imread(url_for('static', filename="img/glitch2.jpg")[1:], -1)
+    imgTest = cv2.resize(imgTest, (width, height))
+    # print(img.shape)
+    # print(imgTest.shape)
+    # print('hellooooooo')
+    # img = cv2.addWeighted(img, 0.75, imgTest, 0.25, 0.0)
+    img = img + imgTest
+    cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
+    return json.dumps(True)
+
 
 
 def pascal(n):
