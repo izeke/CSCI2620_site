@@ -84,31 +84,12 @@ def addHLines(img, minWidth, maxWidth, lines):
 
     return res
 
-
 def shift(img, xShift, yShift):
     shifted = img.copy()
     shifted = np.roll(shifted, xShift, 1)
     shifted = np.roll(shifted, yShift, 0)
 
     return shifted
-
-
-# def shiftSubsetV(img, minWidth, maxWidth, shifts):
-#     res = img.copy()
-
-#     height, width, pix = res.shape
-#     for x in range(shifts):
-#         dist = random.randint(0, height)
-#         left = random.randint(0, width)
-#         right = left + random.randint(minWidth, maxWidth)
-#         if right > width:
-#             right = width
-
-#         resSub = res[:, left:right, :].copy()
-#         resSub = np.roll(resSub, dist, 0)
-#         res[:, left:right, :] = resSub
-
-#     return res
 
 def shiftSubsetV(img, leftBound, subsetWidth, shiftDist):
     res = img.copy()
@@ -157,24 +138,6 @@ def wavy(img):
         res = shiftSubsetH(res, 5 * x, height - (10 * x), y)
 
     return res
-
-# def shiftSubsetH(img, minWidth, maxWidth, shifts):
-#     res = img.copy()
-
-#     height, width, pix = res.shape
-#     for x in range(shifts):
-#         dist = random.randint(0, width)
-#         top = random.randint(0, height)
-#         bottom = top + random.randint(minWidth, maxWidth)
-#         if bottom > width:
-#             right = width
-
-#         resSub = res[top:bottom, :, :].copy()
-#         resSub = np.roll(resSub, dist, 1)
-#         res[top:bottom, :, :] = resSub
-
-#     return res
-
 
 def shiftBlue(img, xShift, yShift):
     shifted = img.copy()

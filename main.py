@@ -222,11 +222,12 @@ def test():
     #vcr border
     # img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
     # height, width, x = img.shape
-    # imgTest = cv2.imread(url_for('static', filename="img/glitch1.jpg")[1:], -1)
+    # imgTest = cv2.imread(url_for('static', filename="img/glitch2.jpg")[1:], -1)
     # imgTest = cv2.resize(imgTest, (width, height))
     # img = img + imgTest
     # cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
 
+    #wavy
     img = cv2.imread(url_for('static', filename="img/out.jpg")[1:], -1)
     img = glitch.wavy(img)
     cv2.imwrite(url_for('static', filename="img/")[1:] + "out.jpg", img)
